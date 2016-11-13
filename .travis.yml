@@ -1,0 +1,22 @@
+language: java
+jdk:
+  - openjdk7
+sudo: required
+before_script:
+- cd $HOME
+- sudo apt-get install -y git-core gnupg flex bison gperf build-essential 
+  zip curl zlib1g-dev gcc-multilib g++-multilib libc6-dev-i386 
+  lib32ncurses5-dev x11proto-core-dev libx11-dev lib32z-dev ccache 
+  libgl1-mesa-dev libxml2-utils xsltproc unzip maven schedtool &> /dev/null
+- wget https://bitbucket.org/sumitrajdev/twrp-5.1.1/raw/e1b6067cc993a41b128b073bd1d99354baed6fbf/twrp-5.1.1.tar.xz -O $HOME/twrp.tar.xz
+- tar -xvf twrp.tar.xz &> log
+
+script:
+- cd $HOME/twrp
+- git clone https://github.com/Grace5921/twrp_device_baffinlite.git device/samsung/baffinlite &> /dev/null
+- source build/envsetup.sh ; lunch omni_baffinlite-userdebug
+- make -j4 recoveryimage
+- cd out/target/product/baffinlite/
+- md5sum recovery.img > md5
+- mv recovery.img "$(date +%Y%m%d)-$(cat md5)"
+- curl --upload-file "./$(date +%Y%m%d)-$(cat md5)" "https://transfer.sh/$(date +%Y%m%d)-$(cat md5)"
