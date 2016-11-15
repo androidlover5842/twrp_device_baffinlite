@@ -8,7 +8,9 @@ before_script:
   zip curl zlib1g-dev gcc-multilib g++-multilib libc6-dev-i386 
   lib32ncurses5-dev x11proto-core-dev libx11-dev lib32z-dev ccache 
   libgl1-mesa-dev libxml2-utils xsltproc unzip maven schedtool &> /dev/null
-- wget https://bitbucket.org/sumitrajdev/twrp-5.1.1/raw/e1b6067cc993a41b128b073bd1d99354baed6fbf/twrp-5.1.1.tar.xz -O $HOME/twrp.tar.xz
+- git clone https://sumitrajdev@bitbucket.org/sumitrajdev/twrp-5.1.1.git $HOME/tmp
+- mv $HOME/tmp/twrp-5.1.1.tar.xz $HOME/twrp.tar.xz
+- rm -rf tmp
 - tar -xvf twrp.tar.xz &> log
 
 script:
@@ -20,3 +22,7 @@ script:
 - md5sum recovery.img > md5
 - mv recovery.img "$(date +%Y%m%d)-$(cat md5)"
 - curl --upload-file "./$(date +%Y%m%d)-$(cat md5)" "https://transfer.sh/$(date +%Y%m%d)-$(cat md5)"
+- tar -H ustar -c $(date +%Y%m%d)-$(cat md5) > $(date +%Y%m%d)-$(cat md5).tar
+- md5sum -t $(date +%Y%m%d)-$(cat md5).tar >> $(date +%Y%m%d)-$(cat md5).tar
+- echo "Made Tar"
+- curl --upload-file "./$(date +%Y%m%d)-$(cat md5).tar" "https://transfer.sh/$(date +%Y%m%d)-$(cat md5).tar
