@@ -23,6 +23,5 @@ script:
 - mv recovery.img "$(date +%Y%m%d)-$(cat md5)"
 - curl --upload-file "./$(date +%Y%m%d)-$(cat md5)" "https://transfer.sh/$(date +%Y%m%d)-$(cat md5)"
 - tar -H ustar -c "$(date +%Y%m%d)-$(cat md5)" > "$(date +%Y%m%d)-$(cat md5).tar"
-- md5sum -t $(date +%Y%m%d)-$(cat md5).tar >> $(date +%Y%m%d)-$(cat md5).tar
 - echo "Made Tar"
 - curl --upload-file "./$(date +%Y%m%d)-$(cat md5).tar" "https://transfer.sh/$(date +%Y%m%d)-$(cat md5).tar"
